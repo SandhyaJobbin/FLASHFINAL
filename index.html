@@ -1,849 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash Five Frenzy - Memory Challenge Game</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-        /* Add minimal styles for testing if needed */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Add your existing styles here or keep your style.css as is */
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="app-container">
-        <!-- header, game container, admin panel, modals, toast container as in your code -->
-        <!-- (Since your code is large, assume the entire HTML structure you provided remains unchanged) -->
+        <!-- Header with Mode Toggle -->
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="app-title">🧠 Flash Five Frenzy</h1>
+                    <div class="header-controls">
+                        <button class="btn btn--secondary mode-toggle" id="modeToggle">
+                            <span class="toggle-text">Admin Panel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Mode -->
+        <main class="game-container" id="gameContainer">
+            <div class="container">
+                <!-- Game Status -->
+                <div class="game-status" id="gameStatus">
+                    <div class="status-item">
+                        <span class="status-label">Round:</span>
+                        <span class="status-value" id="currentRound">1</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Score:</span>
+                        <span class="status-value" id="currentScore">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Lives:</span>
+                        <span class="status-value" id="currentLives">3</span>
+                    </div>
+                </div>
+
+                <!-- Game Phase Container -->
+                <div class="game-phase-container">
+                    <!-- Welcome Screen -->
+                    <div class="game-phase welcome-phase" id="welcomePhase">
+                        <div class="phase-content">
+                            <h2>Welcome to Flash Five Frenzy!</h2>
+                            <p>Test your memory by identifying objects that appeared in each image.</p>
+                            <div class="game-instructions">
+                                <h3>How to Play:</h3>
+                                <ul>
+                                    <li>🔍 Study each image carefully during the memorization phase</li>
+                                    <li>⏱️ You have limited time to memorize all objects</li>
+                                    <li>✅ Select 5 objects that were present in the image</li>
+                                    <li>❌ Avoid selecting objects that weren't there</li>
+                                    <li>🎯 Get all 5 correct to advance to the next round</li>
+                                </ul>
+                            </div>
+<div class="game-instructions">
+ <h3>Scoring & Lives</h3>
+<div>
+<ul>
+        <li>⭐ <strong>Each correct answer:</strong> +2 points</li>
+        <li>❤️ <strong>Lives:</strong> You start with 3 lives</li>
+        <li>❌ <strong>Lose a life:</strong> If you get fewer than 3 correct in a round</li>
+        <li>🏆 <strong>Game ends:</strong> When you run out of lives or finish all rounds</li>
+        <li>🆓 <strong>Demo mode:</strong> Try the game without affecting your score</li>
+</ul>
+    </div>
+</div>
+
+</div>
+                            <div class="welcome-actions">
+                                <button class="btn btn--outline btn--lg demo-btn" id="tryDemoBtn">
+                                    🎮 Try Demo
+                                </button>
+                                <button class="btn btn--primary btn--lg start-game-btn" id="startGameBtn">
+                                    🚀 Start Game
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Demo Mode Indicator -->
+                    <div class="demo-indicator hidden" id="demoIndicator">
+                        <div class="demo-badge">
+                            <span class="demo-text">DEMO MODE</span>
+                            <span class="demo-description">Learning the game mechanics</span>
+                        </div>
+                    </div>
+
+                    <!-- Memorization Phase -->
+                    <div class="game-phase memorization-phase hidden" id="memorizationPhase">
+                        <div class="phase-header">
+                            <h2 class="phase-title">Memorize This Image</h2>
+                            <div class="timer-container">
+                                <span class="timer-label">Time Remaining:</span>
+                                <span class="timer-value" id="memorizationTimer">10</span>s
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <div class="game-image-wrapper">
+                                <img id="memorizationImage" class="game-image" alt="Study this image carefully">
+                                <div class="image-overlay loading-overlay hidden" id="imageLoadingOverlay">
+                                    <div class="loading-spinner"></div>
+                                    <span>Loading image...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="phase-description">
+                            <p id="imageDescription">Study all the objects in this image carefully.</p>
+                        </div>
+                    </div>
+
+                    <!-- Testing Phase -->
+                    <div class="game-phase testing-phase hidden" id="testingPhase">
+                        <div class="phase-header">
+                            <h2 class="phase-title">Select 5 Objects That Were in the Image</h2>
+                            <div class="selection-counter">
+                                Selected: <span id="selectionCount">0</span>/5
+                            </div>
+                        </div>
+                        <div class="objects-grid" id="objectsGrid">
+                            <!-- Objects will be populated here -->
+                        </div>
+                        <div class="phase-actions">
+                            <button class="btn btn--primary submit-btn" id="submitAnswers" disabled>
+                                Submit Answers
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Phase -->
+                    <div class="game-phase results-phase hidden" id="resultsPhase">
+                        <div class="results-container">
+                            <div class="results-header">
+                                <h2 class="results-title" id="resultsTitle">Round Complete!</h2>
+                                <div class="results-score" id="resultsScore">Score: +100</div>
+                            </div>
+                            <div class="results-feedback" id="resultsFeedback">
+                                <!-- Feedback content -->
+                            </div>
+                            <div class="results-actions">
+                                <button class="btn btn--primary next-round-btn" id="nextRoundBtn">
+                                    Next Round
+                                </button>
+                                <button class="btn btn--secondary play-again-btn hidden" id="playAgainBtn">
+                                    Play Again
+                                </button>
+                                <button class="btn btn--outline start-real-game-btn hidden" id="startRealGameBtn">
+                                    🎯 Start Real Game
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game Over Phase -->
+                    <div class="game-phase game-over-phase hidden" id="gameOverPhase">
+                        <div class="game-over-container">
+                            <h2 class="game-over-title">Game Over!</h2>
+                            <div class="final-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Final Score:</span>
+                                    <span class="stat-value" id="finalScore">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Rounds Completed:</span>
+                                    <span class="stat-value" id="roundsCompleted">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Accuracy:</span>
+                                    <span class="stat-value" id="finalAccuracy">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--primary btn--lg" id="restartGameBtn">
+                                Play Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Admin Panel -->
+        <div class="admin-container hidden" id="adminContainer">
+            <div class="container">
+                <div class="admin-header">
+                    <h2>🛠️ Admin Panel - Image Management</h2>
+                    <p>Upload and manage images for the demo and game categories</p>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <div class="tab-list" id="adminTabs">
+                        <!-- Tabs will be generated dynamically -->
+                    </div>
+                    <div class="admin-actions">
+                        <button class="btn btn--outline" id="exportDataBtn">📤 Export Data</button>
+                        <button class="btn btn--outline" id="importDataBtn">📥 Import Data</button>
+                        <input type="file" id="importFileInput" accept=".json" class="hidden">
+                        <button class="btn btn--secondary" id="resetAllBtn">🔄 Reset All</button>
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="tabContent">
+                    <!-- Tab panels will be generated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div class="modal hidden" id="confirmModal">
+            <div class="modal-overlay" id="confirmModalOverlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="confirmModalTitle">Confirm Action</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage">Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn--outline" id="confirmModalCancel">Cancel</button>
+                    <button class="btn btn--primary" id="confirmModalConfirm">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer">
+            <!-- Toasts will be added here dynamically -->
+        </div>
     </div>
 
-    <script>
-        class GameState {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.currentRound = 1;
-                this.score = 0;
-                this.lives = 3;
-                this.currentImage = null;
-                this.selectedObjects = [];
-                this.gameData = null;
-                this.isPlaying = false;
-                this.isDemoMode = false;
-                this.memorizationTimer = null;
-                this.currentMode = 'game'; // 'game' or 'admin'
-                this.correctSelections = 0;
-                this.totalSelections = 0;
-                this.usedImageIds = [];
-            }
-            setDemoMode(isDemo) {
-                this.isDemoMode = isDemo;
-                if (isDemo) this.lives = 1;
-            }
-        }
-
-        class DataManager {
-            constructor() {
-                this.storageKey = 'flashFiveFrenzyData';
-            }
-            getDefaultGameData() {
-                return {
-                    "demo_image": {
-                        "id": 0,
-                        "image_path": "image1.jpg",
-                        "description": "Office/Workspace Setup - Demo",
-                        "correct_objects": [
-                            "Laptop with keyboard and trackpad",
-                            "Smartphone with blank screen",
-                            "Silver pen",
-                            "White cup filled with black coffee",
-                            "Glass vase holding a bouquet of leaves"
-                        ],
-                        "incorrect_objects": [
-                            "A sleek wireless mouse",
-                            "A minimalist notebook or planner",
-                            "An LED desk lamp with an adjustable arm",
-                            "A wooden organizer tray",
-                            "A small potted succulent for a pop of living green"
-                        ]
-                    },
-                    "game_images": [
-                        {
-                            "id": 1,
-                            "image_path": "image2.jpg",
-                            "description": "Emoji Collection",
-                            "correct_objects": [
-                                "😂 Face with Tears of Joy",
-                                "😍 Smiling Face with Heart-Eyes",
-                                "😜 Winking Face with Tongue",
-                                "😬 Grimacing Face",
-                                "😵 Dizzy Face"
-                            ],
-                            "incorrect_objects": [
-                                "🤣 Rolling on the Floor Laughing",
-                                "😝 Squinting Face with Tongue",
-                                "😁 Beaming Face with Smiling Eyes",
-                                "😆 Grinning Squinting Face",
-                                "😉 Winking Face"
-                            ]
-                        },
-                        {
-                            "id": 2,
-                            "image_path": "image3.jpg",
-                            "description": "Fruit Collection",
-                            "correct_objects": [
-                                "Bananas",
-                                "Green grapes",
-                                "Red grapes",
-                                "Oranges",
-                                "Watermelon"
-                            ],
-                            "incorrect_objects": [
-                                "Lychee",
-                                "Rambutan",
-                                "Passion fruit",
-                                "Guava",
-                                "Persimmon"
-                            ]
-                        },
-                        {
-                            "id": 3,
-                            "image_path": "image4.jpg",
-                            "description": "Vehicle Collection",
-                            "correct_objects": [
-                                "Passenger sedans",
-                                "Sport Utility Vehicles (SUVs)",
-                                "Pickup trucks",
-                                "Vans",
-                                "Full-size SUV"
-                            ],
-                            "incorrect_objects": [
-                                "Hatchbook",
-                                "Convertible",
-                                "Motorcycle or scooter",
-                                "Bus",
-                                "Semi-trailer truck"
-                            ]
-                        },
-                        {
-                            "id": 4,
-                            "image_path": "image5.jpg",
-                            "description": "Tech Gadgets Collection",
-                            "correct_objects": [
-                                "White over-ear headphones",
-                                "Black DSLR camera",
-                                "Small cylindrical Bluetooth speaker",
-                                "White tablet with white wired earphones",
-                                "Coiled white USB cable"
-                            ],
-                            "incorrect_objects": [
-                                "Wireless earbuds with a charging case",
-                                "Portable SSD drive",
-                                "Stylus pen for touchscreen devices",
-                                "Laptop computer",
-                                "Compact foldable drone"
-                            ]
-                        }
-                    ]
-                };
-            }
-            loadGameData() {
-                try {
-                    const stored = localStorage.getItem(this.storageKey);
-                    if (stored) {
-                        const data = JSON.parse(stored);
-                        this.defaultData = data;
-                        return data;
-                    }
-                    const defaultData = this.getDefaultGameData();
-                    this.saveGameData(defaultData);
-                    this.defaultData = defaultData;
-                    return defaultData;
-                } catch (e) {
-                    console.error('Error loading data', e);
-                    return this.getDefaultGameData();
-                }
-            }
-            saveGameData(data) {
-                try {
-                    localStorage.setItem(this.storageKey, JSON.stringify(data));
-                } catch (e) { console.error('Error saving data', e); }
-            }
-            exportData() {
-                const dataStr = localStorage.getItem(this.storageKey);
-                if (!dataStr) return false;
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'flash-five-frenzy-data.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                return true;
-            }
-            importData(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        try {
-                            const data = JSON.parse(reader.result);
-                            this.saveGameData(data);
-                            resolve(data);
-                        } catch (e) { reject(e); }
-                    };
-                    reader.onerror = () => reject(new Error('Failed to read file'));
-                    reader.readAsText(file);
-                });
-            }
-        }
-
-        class UIManager {
-            constructor(gameState, dataManager) {
-                this.gameState = gameState;
-                this.dataManager = dataManager;
-                this.elements = {};
-            }
-            init() {
-                this.bindElements();
-                this.bindEvents();
-            }
-            bindElements() {
-                this.elements.modeToggle = document.getElementById('modeToggle');
-                this.elements.gameContainer = document.querySelector('.game-container');
-                this.elements.adminContainer = document.getElementById('adminContainer');
-                this.elements.currentRound = document.getElementById('currentRound');
-                this.elements.currentScore = document.getElementById('currentScore');
-                this.elements.currentLives = document.getElementById('currentLives');
-                this.elements.welcomePhase = document.getElementById('welcomePhase');
-                this.elements.demoIndicator = document.getElementById('demoIndicator');
-                this.elements.memorizationPhase = document.getElementById('memorizationPhase');
-                this.elements.testingPhase = document.getElementById('testingPhase');
-                this.elements.resultsPhase = document.getElementById('resultsPhase');
-                this.elements.gameOverPhase = document.getElementById('gameOverPhase');
-                this.elements.tryDemoBtn = document.getElementById('tryDemoBtn');
-                this.elements.startGameBtn = document.getElementById('startGameBtn');
-                this.elements.memorizationImage = document.getElementById('memorizationImage');
-                this.elements.memorizationTimer = document.getElementById('memorizationTimer');
-                this.elements.imageLoadingOverlay = document.getElementById('imageLoadingOverlay');
-                this.elements.imageDescription = document.getElementById('imageDescription');
-                this.elements.objectsGrid = document.getElementById('objectsGrid');
-                this.elements.selectionCount = document.getElementById('selectionCount');
-                this.elements.submitAnswers = document.getElementById('submitAnswers');
-                this.elements.nextRoundBtn = document.getElementById('nextRoundBtn');
-                this.elements.playAgainBtn = document.getElementById('playAgainBtn');
-                this.elements.startRealGameBtn = document.getElementById('startRealGameBtn');
-                this.elements.restartGameBtn = document.getElementById('restartGameBtn');
-                this.elements.resultsTitle = document.getElementById('resultsTitle');
-                this.elements.resultsScore = document.getElementById('resultsScore');
-                this.elements.resultsFeedback = document.getElementById('resultsFeedback');
-                this.elements.finalScore = document.getElementById('finalScore');
-                this.elements.roundsCompleted = document.getElementById('roundsCompleted');
-                this.elements.finalAccuracy = document.getElementById('finalAccuracy');
-                this.elements.adminTabs = document.getElementById('adminTabs');
-                this.elements.tabContent = document.getElementById('tabContent');
-                this.elements.exportDataBtn = document.getElementById('exportDataBtn');
-                this.elements.importDataBtn = document.getElementById('importDataBtn');
-                this.elements.importFileInput = document.getElementById('importFileInput');
-                this.elements.resetAllBtn = document.getElementById('resetAllBtn');
-                this.elements.confirmModal = document.getElementById('confirmModal');
-                this.elements.confirmModalOverlay = document.getElementById('confirmModalOverlay');
-                this.elements.confirmModalTitle = document.getElementById('confirmModalTitle');
-                this.elements.confirmModalMessage = document.getElementById('confirmModalMessage');
-                this.elements.confirmModalCancel = document.getElementById('confirmModalCancel');
-                this.elements.confirmModalConfirm = document.getElementById('confirmModalConfirm');
-                this.elements.toastContainer = document.getElementById('toastContainer');
-            }
-            bindEvents() {
-                if (this.elements.modeToggle) {
-                    this.elements.modeToggle.addEventListener('click', () => this.toggleMode());
-                }
-                if (this.elements.tryDemoBtn) {
-                    this.elements.tryDemoBtn.addEventListener('click', () => this.startDemo());
-                }
-                if (this.elements.startGameBtn) {
-                    this.elements.startGameBtn.addEventListener('click', () => this.startGame());
-                }
-                if (this.elements.startRealGameBtn) {
-                    this.elements.startRealGameBtn.addEventListener('click', () => this.startGame());
-                }
-                if (this.elements.submitAnswers) {
-                    this.elements.submitAnswers.addEventListener('click', () => this.submitAnswers());
-                }
-                if (this.elements.nextRoundBtn) {
-                    this.elements.nextRoundBtn.addEventListener('click', () => this.nextRound());
-                }
-                if (this.elements.playAgainBtn) {
-                    this.elements.playAgainBtn.addEventListener('click', () => this.restartGame());
-                }
-                if (this.elements.restartGameBtn) {
-                    this.elements.restartGameBtn.addEventListener('click', () => this.restartGame());
-                }
-                if (this.elements.exportDataBtn) {
-                    this.elements.exportDataBtn.addEventListener('click', () => this.exportData());
-                }
-                if (this.elements.importDataBtn) {
-                    this.elements.importDataBtn.addEventListener('click', () => this.importData());
-                }
-                if (this.elements.importFileInput) {
-                    this.elements.importFileInput.addEventListener('change', (e) => this.handleFileImport(e));
-                }
-                if (this.elements.resetAllBtn) {
-                    this.elements.resetAllBtn.addEventListener('click', () => this.resetAllData());
-                }
-                if (this.elements.confirmModalOverlay) {
-                    this.elements.confirmModalOverlay.addEventListener('click', () => this.hideModal());
-                }
-                if (this.elements.confirmModalCancel) {
-                    this.elements.confirmModalCancel.addEventListener('click', () => this.hideModal());
-                }
-            }
-            toggleMode() {
-                if (this.gameState.currentMode === 'game') {
-                    this.gameState.currentMode = 'admin';
-                    this.elements.gameContainer.classList.add('hidden');
-                    this.elements.adminContainer.classList.remove('hidden');
-                    this.elements.modeToggle.querySelector('.toggle-text').textContent = 'Game Mode';
-                    this.setupAdminPanel();
-                } else {
-                    this.gameState.currentMode = 'game';
-                    this.elements.gameContainer.classList.remove('hidden');
-                    this.elements.adminContainer.classList.add('hidden');
-                    this.elements.modeToggle.querySelector('.toggle-text').textContent = 'Admin Panel';
-                }
-            }
-            updateGameStatus() {
-                if (this.elements.currentRound) this.elements.currentRound.textContent = this.gameState.currentRound;
-                if (this.elements.currentScore) this.elements.currentScore.textContent = this.gameState.score;
-                if (this.elements.currentLives) this.elements.currentLives.textContent = this.gameState.lives;
-            }
-            showPhase(phase) {
-                document.querySelectorAll('.game-phase').forEach(p => p.classList.add('hidden'));
-                this.elements.demoIndicator.classList.add('hidden');
-                if (phase === 'welcome') {
-                    this.elements.gameStatus && this.elements.gameStatus.classList.add('hidden');
-                } else {
-                    this.elements.gameStatus && this.elements.gameStatus.classList.remove('hidden');
-                    if (this.gameState.isDemoMode) {
-                        this.elements.demoIndicator && this.elements.demoIndicator.classList.remove('hidden');
-                    }
-                }
-                const phaseElement = this.elements[phase + 'Phase'];
-                if (phaseElement) phaseElement.classList.remove('hidden');
-            }
-            startDemo() {
-                this.gameState.reset();
-                this.gameState.setDemoMode(true);
-                this.gameState.isPlaying = true;
-                this.updateGameStatus();
-                this.startMemorizationPhase();
-            }
-            startGame() {
-                this.gameState.reset();
-                this.gameState.setDemoMode(false);
-                this.gameState.isPlaying = true;
-                this.updateGameStatus();
-                this.startMemorizationPhase();
-            }
-            startMemorizationPhase() {
-                if (this.gameState.isDemoMode) {
-                    this.gameState.currentImage = this.gameState.gameData.demo_image;
-                } else {
-                    const images = this.gameState.gameData.game_images;
-                    if (this.gameState.currentRound > images.length) {
-                        this.showGameOver();
-                        return;
-                    }
-                    this.gameState.currentImage = images[this.gameState.currentRound - 1];
-                }
-                this.showPhase('memorization');
-                if (this.elements.imageDescription) {
-                    this.elements.imageDescription.textContent =
-                        `Study the ${this.gameState.currentImage.description} carefully. (${this.gameState.isDemoMode ? 'demo' : 'game'} mode)`;
-                }
-                if (this.elements.imageLoadingOverlay) {
-                    this.elements.imageLoadingOverlay.classList.remove('hidden');
-                }
-                this.loadGameImage();
-            }
-            loadGameImage() {
-                const imagePath = this.gameState.currentImage.image_path;
-                const img = new Image();
-                img.onload = () => {
-                    if (this.elements.memorizationImage) {
-                        this.elements.memorizationImage.src = imagePath;
-                    }
-                    if (this.elements.imageLoadingOverlay) {
-                        this.elements.imageLoadingOverlay.classList.add('hidden');
-                    }
-                    this.startTimer();
-                };
-                img.onerror = () => {
-                    const placeholderSvg = this.createPlaceholderImage(this.gameState.currentImage.description);
-                    if (this.elements.memorizationImage) {
-                        this.elements.memorizationImage.src = placeholderSvg;
-                    }
-                    if (this.elements.imageLoadingOverlay) {
-                        this.elements.imageLoadingOverlay.classList.add('hidden');
-                    }
-                    this.showToast(`Image ${imagePath} not found. Using placeholder.`, 'warning');
-                    this.startTimer();
-                };
-                img.src = imagePath;
-            }
-            createPlaceholderImage(description) {
-                const svg = `
-      <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#f0f0f0"/>
-        <rect x="50" y="50" width="500" height="300" fill="#e0e0e0" stroke="#ccc" stroke-width="2" rx="10"/>
-        <text x="300" y="180" font-family="Arial, sans-serif" font-size="18" fill="#666" text-anchor="middle">${description}</text>
-        <text x="300" y="220" font-family="Arial, sans-serif" font-size="14" fill="#999" text-anchor="middle">Image placeholder - Add real image to images/folder</text>
-      </svg>
-    `;
-                return 'data:image/svg+xml;base64,' + btoa(svg);
-            }
-            startTimer() {
-                let timeLeft = 10;
-                if (this.elements.memorizationTimer) {
-                    this.elements.memorizationTimer.textContent = timeLeft;
-                }
-                if (this.gameState.memorizationTimer) clearInterval(this.gameState.memorizationTimer);
-                this.gameState.memorizationTimer = setInterval(() => {
-                    timeLeft--;
-                    if (this.elements.memorizationTimer) {
-                        this.elements.memorizationTimer.textContent = timeLeft;
-                    }
-                    if (timeLeft <= 0) {
-                        clearInterval(this.gameState.memorizationTimer);
-                        this.startTestingPhase();
-                    }
-                }, 1000);
-            }
-            startTestingPhase() {
-                this.showPhase('testing');
-                this.gameState.selectedObjects = [];
-                this.generateObjectGrid();
-                this.updateSelectionCount();
-            }
-            generateObjectGrid() {
-                const allObjects = [
-                    ...this.gameState.currentImage.correct_objects,
-                    ...this.gameState.currentImage.incorrect_objects
-                ];
-                const shuffled = this.shuffleArray([...allObjects]);
-                if (this.elements.objectsGrid) {
-                    this.elements.objectsGrid.innerHTML = '';
-                    shuffled.forEach((obj) => {
-                        const div = document.createElement('div');
-                        div.className = 'object-card';
-                        div.dataset.object = obj;
-                        div.innerHTML = `<div class="object-text">${obj}</div>`;
-                        div.addEventListener('click', () => this.selectObject(div, obj));
-                        this.elements.objectsGrid.appendChild(div);
-                    });
-                }
-            }
-            selectObject(card, obj) {
-                if (card.classList.contains('selected')) {
-                    card.classList.remove('selected');
-                    this.gameState.selectedObjects = this.gameState.selectedObjects.filter(o => o !== obj);
-                } else {
-                    if (this.gameState.selectedObjects.length >= 5) {
-                        this.showToast("You can only select 5 objects!", 'warning');
-                        return;
-                    }
-                    card.classList.add('selected');
-                    this.gameState.selectedObjects.push(obj);
-                }
-                this.updateSelectionCount();
-                if (this.elements.submitAnswers) {
-                    this.elements.submitAnswers.disabled = this.gameState.selectedObjects.length !== 5;
-                }
-            }
-            updateSelectionCount() {
-                if (this.elements.selectionCount) {
-                    this.elements.selectionCount.textContent = this.gameState.selectedObjects.length;
-                }
-            }
-            submitAnswers() {
-                const corrects = this.gameState.currentImage.correct_objects;
-                const selected = this.gameState.selectedObjects;
-                const results = { correct: [], incorrect: [], missed: [] };
-                selected.forEach(o => {
-                    if (corrects.includes(o)) results.correct.push(o);
-                    else results.incorrect.push(o);
-                });
-                corrects.forEach(o => {
-                    if (!selected.includes(o)) results.missed.push(o);
-                });
-                this.gameState.correctSelections += results.correct.length;
-                this.gameState.totalSelections += selected.length;
-                document.querySelectorAll('.object-card').forEach(card => {
-                    const obj = card.dataset.object;
-                    if (results.correct.includes(obj)) card.classList.add('correct');
-                    else if (results.incorrect.includes(obj)) card.classList.add('incorrect');
-                });
-                setTimeout(() => this.showResults(results), 2000);
-            }
-            showResults(results) {
-                const correctCount = results.correct.length;
-                const roundScore = correctCount * 2;
-                if (!this.gameState.isDemoMode) this.gameState.score += roundScore;
-                this.showPhase('results');
-                if (this.elements.resultsTitle) {
-                    if (correctCount === 5) {
-                        this.elements.resultsTitle.textContent = this.gameState.isDemoMode ? 'Demo Complete! 🎉' : 'Perfect Round! 🎉';
-                        this.elements.resultsTitle.style.color = 'var(--color-success)';
-                    } else if (correctCount >= 3) {
-                        this.elements.resultsTitle.textContent = 'Good Job! 👍';
-                        this.elements.resultsTitle.style.color = 'var(--color-warning)';
-                    } else {
-                        this.elements.resultsTitle.textContent = 'Keep Trying! 💪';
-                        this.elements.resultsTitle.style.color = 'var(--color-error)';
-                        if (!this.gameState.isDemoMode) this.gameState.lives--;
-                    }
-                }
-                if (this.elements.resultsScore) {
-                    this.elements.resultsScore.textContent = `Score: +${roundScore}`;
-                }
-                this.generateResultsFeedback(results);
-                this.updateGameStatus();
-                if (this.gameState.isDemoMode) {
-                    this.elements.nextRoundBtn.classList.add('hidden');
-                    this.elements.playAgainBtn.classList.add('hidden');
-                    this.elements.startRealGameBtn.classList.remove('hidden');
-                } else if (this.gameState.lives <= 0) {
-                    this.elements.nextRoundBtn.classList.add('hidden');
-                    this.elements.playAgainBtn.classList.remove('hidden');
-                    this.elements.startRealGameBtn.classList.add('hidden');
-                    setTimeout(() => this.showGameOver(), 3000);
-                } else {
-                    this.elements.nextRoundBtn.classList.remove('hidden');
-                    this.elements.playAgainBtn.classList.add('hidden');
-                    this.elements.startRealGameBtn.classList.add('hidden');
-                }
-            }
-            generateResultsFeedback(results) {
-                let html = `
-      <div class="feedback-section">
-        <h4>✅ Correct Selections (${results.correct.length}/5)</h4>
-        <ul class="feedback-list">${results.correct.map(o => `<li>• ${o}</li>`).join('')}</ul>
-      </div>
-    `;
-                if (results.incorrect.length > 0) {
-                    html += `
-        <div class="feedback-section">
-          <h4>❌ Incorrect Selections (${results.incorrect.length})</h4>
-          <ul class="feedback-list">${results.incorrect.map(o => `<li>• ${o}</li>`).join('')}</ul>
-        </div>
-      `;
-                }
-                if (results.missed.length > 0) {
-                    html += `
-        <div class="feedback-section">
-          <h4>👀 You Missed These Objects</h4>
-          <ul class="feedback-list">${results.missed.map(o => `<li>• ${o}</li>`).join('')}</ul>
-        </div>
-      `;
-                }
-                if (this.gameState.isDemoMode) {
-                    html += `
-        <div class="feedback-section">
-          <h4>🎯 Ready for the Real Challenge?</h4>
-          <p style="color: var(--color-text-secondary); margin: 0;">Now you know how to play! Try the real game with different image categories and progressive difficulty. Can you beat your high score?</p>
-        </div>
-      `;
-                }
-                if (this.elements.resultsFeedback) {
-                    this.elements.resultsFeedback.innerHTML = html;
-                }
-            }
-            nextRound() {
-                this.gameState.currentRound++;
-                this.updateGameStatus();
-                this.startMemorizationPhase();
-            }
-            restartGame() {
-                this.gameState.reset();
-                this.updateGameStatus();
-                this.showPhase('welcome');
-            }
-            showGameOver() {
-                this.showPhase('gameOver');
-                const accuracy = this.gameState.totalSelections > 0 ? Math.round((this.gameState.correctSelections / this.gameState.totalSelections) * 100) : 0;
-                if (this.elements.finalScore) this.elements.finalScore.textContent = this.gameState.score;
-                if (this.elements.roundsCompleted) this.elements.roundsCompleted.textContent = this.gameState.currentRound - 1;
-                if (this.elements.finalAccuracy) this.elements.finalAccuracy.textContent = accuracy + '%';
-            }
-            // Admin functions omitted for brevity, keep as your existing code...
-            setupAdminPanel() {
-                const data = this.gameState.gameData;
-                if (!data) return;
-                const allImages = [data.demo_image, ...data.game_images];
-                this.generateAdminTabs(allImages);
-                this.generateTabContent(allImages);
-            }
-            generateAdminTabs(images) {
-                if (!this.elements.adminTabs) return;
-                this.elements.adminTabs.innerHTML = images.map((img, index) =>
-                    `<button class="tab-button ${index === 0 ? 'active' : ''}" data-tab="${img.id}">
-        ${img.id === 0 ? 'Demo: ' : ''}${img.description}
-      </button>`
-                ).join('');
-                this.elements.adminTabs.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('tab-button')) {
-                        this.switchTab(e.target.dataset.tab);
-                    }
-                });
-            }
-            generateTabContent(images) {
-                if (!this.elements.tabContent) return;
-                this.elements.tabContent.innerHTML = images.map((img, index) =>
-                    `<div class="tab-panel ${index === 0 ? 'active' : ''}" data-panel="${img.id}">
-        ${this.generateCategoryPanel(img)}
-      </div>`
-                ).join('');
-                this.bindUploadEvents();
-            }
-            generateCategoryPanel(image) {
-                const isDemo = image.id === 0;
-                return `
-      <div class="category-header">
-        <h3 class="category-title">${isDemo ? 'Demo: ' : ''}${image.description}</h3>
-        <p class="category-description">
-          ${isDemo ? 'Demo image (image1.jpg) - Used for teaching gameplay' : `Game image (${image.image_path}) - Used in main game rounds`}
-        </p>
-      </div>
-      <div class="image-upload-section" data-category="${image.id}">
-        <div class="upload-area">
-          <div class="upload-placeholder">
-            📁 Drop an image here or click to browse
-          </div>
-          <input type="file" class="file-input form-control" accept="image/*" data-category="${image.id}">
-          ${image.uploaded_image ? `<img src="${image.uploaded_image}" alt="Preview" class="image-preview">` : ''}
-        </div>
-      </div>
-      <div class="objects-management">
-        <div class="objects-section">
-          <h4>✅ Correct Objects</h4>
-          <ul class="objects-list">
-            ${image.correct_objects.map((obj, idx) => `
-              <li class="object-item">
-                <span class="object-text">${obj}</span>
-                <button class="edit-object-btn" data-category="${image.id}" data-type="correct" data-index="${idx}">Edit</button>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-        <div class="objects-section">
-          <h4>❌ Incorrect Objects</h4>
-          <ul class="objects-list">
-            ${image.incorrect_objects.map((obj, idx) => `
-              <li class="object-item">
-                <span class="object-text">${obj}</span>
-                <button class="edit-object-btn" data-category="${image.id}" data-type="incorrect" data-index="${idx}">Edit</button>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-      </div>
-    `;
-            }
-            switchTab(tabId) {
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
-                if (activeBtn) activeBtn.classList.add('active');
-                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                const activePanel = document.querySelector(`[data-panel="${tabId}"]`);
-                if (activePanel) activePanel.classList.add('active');
-            }
-            bindUploadEvents() {
-                document.querySelectorAll('.file-input').forEach(input => {
-                    input.addEventListener('change', (e) => this.handleImageUpload(e));
-                });
-                document.querySelectorAll('.image-upload-section').forEach(section => {
-                    section.addEventListener('click', () => {
-                        const input = section.querySelector('.file-input');
-                        if (input) input.click();
-                    });
-                });
-                document.querySelectorAll('.edit-object-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.editObject(e));
-                });
-            }
-            handleImageUpload(e) {
-                const file = e.target.files[0];
-                const categoryId = e.target.dataset.category;
-                if (file) {
-                    this.processImageFile(file, categoryId);
-                }
-            }
-            processImageFile(file, categoryId) {
-                if (!file.type.startsWith('image/')) {
-                    this.showToast('Please select an image file', 'error');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const dataUrl = reader.result;
-                    this.updateImageForCategory(categoryId, dataUrl);
-                    this.showToast('Image uploaded successfully!', 'success');
-                };
-                reader.readAsDataURL(file);
-            }
-            updateImageForCategory(categoryId, imageData) {
-                const isDemo = categoryId == 0;
-                let category;
-                if (isDemo) {
-                    category = this.gameState.gameData.demo_image;
-                } else {
-                    category = this.gameState.gameData.game_images.find(img => img.id == categoryId);
-                }
-                if (category) {
-                    category.uploaded_image = imageData;
-                    this.dataManager.saveGameData(this.gameState.gameData);
-                    const panel = document.querySelector(`[data-panel="${categoryId}"]`);
-                    if (panel) {
-                        const uploadSection = panel.querySelector('.upload-area');
-                        let preview = uploadSection.querySelector('.image-preview');
-                        if (!preview) {
-                            preview = document.createElement('img');
-                            preview.className = 'image-preview';
-                            preview.alt = 'Preview';
-                            uploadSection.appendChild(preview);
-                        }
-                        preview.src = imageData;
-                    }
-                }
-            }
-            editObject(e) {
-                const btn = e.target;
-                const categoryId = btn.dataset.category;
-                const type = btn.dataset.type;
-                const index = parseInt(btn.dataset.index);
-                const isDemo = categoryId == 0;
-                let category;
-                if (isDemo) {
-                    category = this.gameState.gameData.demo_image;
-                } else {
-                    category = this.gameState.gameData.game_images.find(img => img.id == categoryId);
-                }
-                const currentText = category[type + '_objects'][index];
-                const newText = prompt(`Edit ${type} object:`, currentText);
-                if (newText && newText.trim() && newText !== currentText) {
-                    category[type + '_objects'][index] = newText.trim();
-                    this.dataManager.saveGameData(this.gameState.gameData);
-                    btn.parentElement.querySelector('.object-text').textContent = newText.trim();
-                    this.showToast('Object updated successfully!', 'success');
-                }
-            }
-            exportData() {
-                if (this.dataManager.exportData()) {
-                    this.showToast('Data exported successfully!', 'success');
-                } else {
-                    this.showToast('Failed to export data', 'error');
-                }
-            }
-            importData() {
-                if (this.elements.importFileInput) this.elements.importFileInput.click();
-            }
-            handleFileImport(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    this.dataManager.importData(file).then((data) => {
-                        this.gameState.gameData = data;
-                        this.showToast('Data imported successfully!', 'success');
-                        this.setupAdminPanel();
-                    }).catch((err) => this.showToast('Failed to import: ' + err.message, 'error'));
-                }
-            }
-            resetAllData() {
-                this.showModal('Reset All Data', 'This will reset all images and objects to default values. This action cannot be undone.', () => {
-                    localStorage.removeItem(this.dataManager.storageKey);
-                    const data = this.dataManager.loadGameData();
-                    this.gameState.gameData = data;
-                    this.setupAdminPanel();
-                    this.showToast('All data has been reset to defaults', 'success');
-                });
-            }
-            showModal(title, message, confirmCallback) {
-                if (this.elements.confirmModalTitle) this.elements.confirmModalTitle.textContent = title;
-                if (this.elements.confirmModalMessage) this.elements.confirmModalMessage.textContent = message;
-                if (this.elements.confirmModal) this.elements.confirmModal.classList.remove('hidden');
-                if (this.elements.confirmModalConfirm) {
-                    this.elements.confirmModalConfirm.onclick = () => {
-                        confirmCallback();
-                        this.hideModal();
-                    };
-                }
-            }
-            hideModal() {
-                if (this.elements.confirmModal) this.elements.confirmModal.classList.add('hidden');
-            }
-            showToast(message, type = 'info') {
-                if (!this.elements.toastContainer) return;
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `<span class="toast-icon">${this.getToastIcon(type)}</span><span class="toast-message">${message}</span>`;
-                this.elements.toastContainer.appendChild(toast);
-                setTimeout(() => toast.classList.add('show'), 100);
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
-            getToastIcon(type) {
-                const icons = {
-                    success: '✅',
-                    error: '❌',
-                    warning: '⚠️',
-                    info: 'ℹ️'
-                };
-                return icons[type] || icons.info;
-            }
-            shuffleArray(array) {
-                const arr = [...array];
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            }
-        }
-
-        class FlashFiveFrenzyApp {
-            constructor() {
-                this.gameState = new GameState();
-                this.dataManager = new DataManager();
-                this.uiManager = new UIManager(this.gameState, this.dataManager);
-                this.init();
-            }
-            init() {
-                const data = this.dataManager.loadGameData();
-                this.gameState.gameData = data;
-                this.uiManager.init();
-                this.uiManager.updateGameStatus();
-                console.log('Game initialized with images in same folder.');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new FlashFiveFrenzyApp();
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
-
 </html>
