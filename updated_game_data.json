@@ -1,0 +1,250 @@
+{
+  "demo_image": {
+    "id": 0,
+    "description": "Office/Workspace Setup - Demo",
+    "correct_objects": [
+      "Laptop with keyboard and trackpad",
+      "Smartphone with blank screen",
+      "Silver pen",
+      "White cup filled with black coffee",
+      "Glass vase holding a bouquet of leaves"
+    ],
+    "incorrect_objects": [
+      "A sleek wireless mouse",
+      "A minimalist notebook or planner",
+      "An LED desk lamp with an adjustable arm",
+      "A wooden organizer tray",
+      "A small potted succulent for a pop of living green"
+    ]
+  },
+  "game_images": [
+    {
+      "id": 1,
+      "description": "Emoji Collection",
+      "correct_objects": [
+        "\ud83d\ude02 Face with Tears of Joy",
+        "\ud83d\ude0d Smiling Face with Heart-Eyes",
+        "\ud83d\ude1c Winking Face with Tongue",
+        "\ud83d\ude2c Grimacing Face",
+        "\ud83d\ude35 Dizzy Face",
+        "\ud83d\ude0a Smiling Face with Smiling Eyes",
+        "\ud83d\ude04 Grinning Face with Smiling Eye"
+      ],
+      "incorrect_objects": [
+        "\ud83e\udd23 Rolling on the Floor Laughing",
+        "\ud83d\ude1d Squinting Face with Tongue",
+        "\ud83d\ude01 Beaming Face with Smiling Eyes",
+        "\ud83d\ude06 Grinning Squinting Face",
+        "\ud83d\ude09 Winking Face"
+      ]
+    },
+    {
+      "id": 2,
+      "description": "Fruit Collection",
+      "correct_objects": [
+        "Bananas",
+        "Green grapes",
+        "Red grapes",
+        "Oranges",
+        "Watermelon",
+        "Pineapple",
+        "Papaya",
+        "Kiwi",
+        "Mangoes",
+        "Dragon fruit",
+        "Starfruit",
+        "Cantaloupe",
+        "Coconut"
+      ],
+      "incorrect_objects": [
+        "Lychee",
+        "Rambutan",
+        "Passion fruit",
+        "Guava",
+        "Persimmon"
+      ]
+    },
+    {
+      "id": 3,
+      "description": "Vehicle Collection",
+      "correct_objects": [
+        "Passenger sedans",
+        "Sport Utility Vehicles (SUVs)",
+        "Pickup trucks",
+        "Vans",
+        "Full-size SUV"
+      ],
+      "incorrect_objects": [
+        "Hatchback",
+        "Convertible",
+        "Motorcycle or scooter",
+        "Bus",
+        "Semi-trailer truck"
+      ]
+    },
+    {
+      "id": 4,
+      "description": "Tech Gadgets Collection",
+      "correct_objects": [
+        "White over-ear headphones",
+        "Black DSLR camera",
+        "Small cylindrical Bluetooth speaker",
+        "White tablet with white wired earphones",
+        "Coiled white USB cable",
+        "Black over-ear headphones",
+        "Black smartphone",
+        "Black smartwatch",
+        "Action camera",
+        "Black handheld device",
+        "Black ring light or lens adapter",
+        "Coiled black audio cable"
+      ],
+      "incorrect_objects": [
+        "Wireless earbuds with a charging case",
+        "Portable SSD drive",
+        "Stylus pen for touchscreen devices",
+        "Laptop computer",
+        "Compact foldable drone"
+      ]
+    },
+    {
+      "id": 5,
+      "description": "Home Office Setup",
+      "correct_objects": [
+        "White desk lamp",
+        "Small potted plant",
+        "Cup of coffee",
+        "White tablet with cover",
+        "Open notebook",
+        "Green pencil",
+        "Transparent pouch",
+        "White container of pens and markers",
+        "Wooden desk",
+        "Wooden chair",
+        "Bed with white checkered bedding"
+      ],
+      "incorrect_objects": [
+        "Desk organizer tray",
+        "Sticky note dispenser",
+        "Analog desk clock",
+        "Laptop or monitor stand"
+      ]
+    },
+    {
+      "id": 6,
+      "description": "Art Supplies Collection",
+      "correct_objects": [
+        "Pink chisel-tip highlighter",
+        "Wooden ruler",
+        "Blue synthetic-bristle paintbrush",
+        "Metallic pink binder clip",
+        "Yellow pencil sharpener",
+        "Red paintbrush",
+        "Black pen",
+        "Colored pencils (blue, red, green, orange, pink)",
+        "Green ballpoint pen",
+        "Blue flag pushpin",
+        "Yellow plastic scissors"
+      ],
+      "incorrect_objects": [
+        "Eraser (rubber or kneaded)",
+        "Sticky note pad",
+        "Stapler with staples",
+        "Pencil case or pouch",
+        "Washi tape set"
+      ]
+    },
+    {
+      "id": 7,
+      "description": "Office Workspace",
+      "correct_objects": [
+        "White computer keyboard",
+        "Tortoiseshell eyeglasses",
+        "Green succulent plant in a white pot",
+        "Clipboard holding a brown envelope",
+        "Two pencils",
+        "Two paper clips",
+        "Takeaway coffee cup with a white lid"
+      ],
+      "incorrect_objects": [
+        "Adjustable desk lamp",
+        "Ergonomic wireless mouse",
+        "Mouse pad with wrist support",
+        "Spiral-bound notebook or planner",
+        "Cable management clips"
+      ]
+    },
+    {
+      "id": 8,
+      "description": "Birthday Party Setup",
+      "correct_objects": [
+        "Large decorative poster",
+        "Clusters of pastel balloons",
+        "Multiple wooden tables",
+        "Multi-tiered birthday cake",
+        "Flower arrangements",
+        "Small pink baby shoes",
+        "Trays of decorated cookies and assorted candies",
+        "Plush toy dog placed among the treats",
+        "Farm-themed party favor boxes",
+        "Outdoor wooden deck"
+      ],
+      "incorrect_objects": [
+        "Hay bale seating for a rustic touch",
+        "Gingham-patterned tablecloths",
+        "Pin the Tail on the Donkey game poster",
+        "Farm-animal face masks for guests",
+        "Wooden crates as display risers"
+      ]
+    },
+    {
+      "id": 9,
+      "description": "Organized Closet",
+      "correct_objects": [
+        "Folded clothes on shelves",
+        "Storage boxes in top and side compartments",
+        "Wire baskets holding accessories",
+        "Hanging shirts (organized by color)",
+        "Hanging jackets",
+        "Casual shirts and pants on rods",
+        "Built-in drawers",
+        "Shoes neatly lined up at the bottom",
+        "Hanging dresses and formal wear",
+        "Fur coats on the right",
+        "Handbags on upper shelves",
+        "Hats and other small accessories",
+        "Folded blankets and linens in the top compartments"
+      ],
+      "incorrect_objects": [
+        "Full-length mirror",
+        "Tie rack or tie organizer",
+        "Belt and scarf hanging rack",
+        "Jewelry tray or drawer insert",
+        "Laundry hamper or basket"
+      ]
+    },
+    {
+      "id": 10,
+      "description": "Sports Equipment Collection",
+      "correct_objects": [
+        "White and black football shoulder pads",
+        "Red football helmet with white faceguard",
+        "Orange basketball",
+        "Pair of white, black, and red athletic shoes",
+        "Tennis racket with a yellow tennis ball",
+        "Black and white soccer ball",
+        "Pair of red boxing gloves",
+        "Pair of black cleats",
+        "Blue and tan baseball glove holding a white baseball",
+        "Yellow softball"
+      ],
+      "incorrect_objects": [
+        "Cricket bat",
+        "Rugby ball",
+        "Swimming goggles",
+        "Jump rope",
+        "Dumbbell"
+      ]
+    }
+  ]
+}

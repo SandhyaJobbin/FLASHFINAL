@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Five Frenzy - Memory Challenge Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header with Mode Toggle -->
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="app-title">🧠 Flash Five Frenzy</h1>
+                    <div class="header-controls">
+                        <button class="btn btn--secondary mode-toggle" id="modeToggle">
+                            <span class="toggle-text">Admin Panel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Mode -->
+        <main class="game-container" id="gameContainer">
+            <div class="container">
+                <!-- Game Status -->
+                <div class="game-status" id="gameStatus">
+                    <div class="status-item">
+                        <span class="status-label">Round:</span>
+                        <span class="status-value" id="currentRound">1</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Score:</span>
+                        <span class="status-value" id="currentScore">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Lives:</span>
+                        <span class="status-value" id="currentLives">3</span>
+                    </div>
+                </div>
+
+                <!-- Game Phase Container -->
+                <div class="game-phase-container">
+                    <!-- Welcome Screen -->
+                    <div class="game-phase welcome-phase" id="welcomePhase">
+                        <div class="phase-content">
+                            <h2>Welcome to Flash Five Frenzy!</h2>
+                            <p>Test your memory by identifying objects that appeared in each image.</p>
+                            <div class="game-instructions">
+                                <h3>How to Play:</h3>
+                                <ul>
+                                    <li>🔍 Study each image carefully during the memorization phase</li>
+                                    <li>⏱️ You have limited time to memorize all objects</li>
+                                    <li>✅ Select 5 objects that were present in the image</li>
+                                    <li>❌ Avoid selecting objects that weren't there</li>
+                                    <li>🎯 Get all 5 correct to advance to the next round</li>
+                                </ul>
+                            </div>
+<div class="game-instructions">
+ <h3>Scoring & Lives</h3>
+<div>
+<ul>
+        <li>⭐ <strong>Each correct answer:</strong> +2 points</li>
+        <li>❤️ <strong>Lives:</strong> You start with 3 lives</li>
+        <li>❌ <strong>Lose a life:</strong> If you get fewer than 3 correct in a round</li>
+        <li>🏆 <strong>Game ends:</strong> When you run out of lives or finish all rounds</li>
+        <li>🆓 <strong>Demo mode:</strong> Try the game without affecting your score</li>
+</ul>
+    </div>
+</div>
+
+</div>
+                            <div class="welcome-actions">
+                                <button class="btn btn--outline btn--lg demo-btn" id="tryDemoBtn">
+                                    🎮 Try Demo
+                                </button>
+                                <button class="btn btn--primary btn--lg start-game-btn" id="startGameBtn">
+                                    🚀 Start Game
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Demo Mode Indicator -->
+                    <div class="demo-indicator hidden" id="demoIndicator">
+                        <div class="demo-badge">
+                            <span class="demo-text">DEMO MODE</span>
+                            <span class="demo-description">Learning the game mechanics</span>
+                        </div>
+                    </div>
+
+                    <!-- Memorization Phase -->
+                    <div class="game-phase memorization-phase hidden" id="memorizationPhase">
+                        <div class="phase-header">
+                            <h2 class="phase-title">Memorize This Image</h2>
+                            <div class="timer-container">
+                                <span class="timer-label">Time Remaining:</span>
+                                <span class="timer-value" id="memorizationTimer">10</span>s
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <div class="game-image-wrapper">
+                                <img id="memorizationImage" class="game-image" alt="Study this image carefully">
+                                <div class="image-overlay loading-overlay hidden" id="imageLoadingOverlay">
+                                    <div class="loading-spinner"></div>
+                                    <span>Loading image...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="phase-description">
+                            <p id="imageDescription">Study all the objects in this image carefully.</p>
+                        </div>
+                    </div>
+
+                    <!-- Testing Phase -->
+                    <div class="game-phase testing-phase hidden" id="testingPhase">
+                        <div class="phase-header">
+                            <h2 class="phase-title">Select 5 Objects That Were in the Image</h2>
+                            <div class="selection-counter">
+                                Selected: <span id="selectionCount">0</span>/5
+                            </div>
+                        </div>
+                        <div class="objects-grid" id="objectsGrid">
+                            <!-- Objects will be populated here -->
+                        </div>
+                        <div class="phase-actions">
+                            <button class="btn btn--primary submit-btn" id="submitAnswers" disabled>
+                                Submit Answers
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Phase -->
+                    <div class="game-phase results-phase hidden" id="resultsPhase">
+                        <div class="results-container">
+                            <div class="results-header">
+                                <h2 class="results-title" id="resultsTitle">Round Complete!</h2>
+                                <div class="results-score" id="resultsScore">Score: +100</div>
+                            </div>
+                            <div class="results-feedback" id="resultsFeedback">
+                                <!-- Feedback content -->
+                            </div>
+                            <div class="results-actions">
+                                <button class="btn btn--primary next-round-btn" id="nextRoundBtn">
+                                    Next Round
+                                </button>
+                                <button class="btn btn--secondary play-again-btn hidden" id="playAgainBtn">
+                                    Play Again
+                                </button>
+                                <button class="btn btn--outline start-real-game-btn hidden" id="startRealGameBtn">
+                                    🎯 Start Real Game
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game Over Phase -->
+                    <div class="game-phase game-over-phase hidden" id="gameOverPhase">
+                        <div class="game-over-container">
+                            <h2 class="game-over-title">Game Over!</h2>
+                            <div class="final-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Final Score:</span>
+                                    <span class="stat-value" id="finalScore">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Rounds Completed:</span>
+                                    <span class="stat-value" id="roundsCompleted">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Accuracy:</span>
+                                    <span class="stat-value" id="finalAccuracy">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--primary btn--lg" id="restartGameBtn">
+                                Play Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Admin Panel -->
+        <div class="admin-container hidden" id="adminContainer">
+            <div class="container">
+                <div class="admin-header">
+                    <h2>🛠️ Admin Panel - Image Management</h2>
+                    <p>Upload and manage images for the demo and game categories</p>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <div class="tab-list" id="adminTabs">
+                        <!-- Tabs will be generated dynamically -->
+                    </div>
+                    <div class="admin-actions">
+                        <button class="btn btn--outline" id="exportDataBtn">📤 Export Data</button>
+                        <button class="btn btn--outline" id="importDataBtn">📥 Import Data</button>
+                        <input type="file" id="importFileInput" accept=".json" class="hidden">
+                        <button class="btn btn--secondary" id="resetAllBtn">🔄 Reset All</button>
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="tabContent">
+                    <!-- Tab panels will be generated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div class="modal hidden" id="confirmModal">
+            <div class="modal-overlay" id="confirmModalOverlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="confirmModalTitle">Confirm Action</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage">Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn--outline" id="confirmModalCancel">Cancel</button>
+                    <button class="btn btn--primary" id="confirmModalConfirm">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer">
+            <!-- Toasts will be added here dynamically -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
