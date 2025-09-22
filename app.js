@@ -852,7 +852,7 @@ startMemorizationPhase() {
             <div class="category-header">
                 <h3 class="category-title">${isDemo ? 'Demo: ' : ''}${image.description}</h3>
                 <p class="category-description">
-                    ${isDemo ? 'Demo image (images/image1.jpg) - Used for teaching gameplay' : `Game image (${image.image_path}) - Used in main game rounds`}
+                    ${isDemo ? 'Demo image (image1.jpg) - Used for teaching gameplay' : `Game image (${image.image_path}) - Used in main game rounds`}
                 </p>
             </div>
             
